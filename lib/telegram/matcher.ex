@@ -12,7 +12,7 @@ defmodule Telegram.Matcher do
   end
 
   def handle_cast(message, state) do
-    Application.get_env(:telegram, :commands).match_message(message)
+    Application.get_env(:tg_bot, :commands).match_message(message)
 
     {:noreply, state}
   end

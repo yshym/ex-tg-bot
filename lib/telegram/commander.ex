@@ -1,5 +1,5 @@
 defmodule Telegram.Commander do
-  @bot_name Application.get_env(:telegram, :bot_name)
+  @bot_name Application.get_env(:tg_bot, :bot_name)
 
   # Code injectors
 

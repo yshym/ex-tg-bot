@@ -3,12 +3,10 @@ defmodule App.Mixfile do
 
   def project do
     [
-      app: :app,
+      app: :tg_bot,
       version: "0.1.0",
-      elixir: "~> 1.3",
+      elixir: "~> 1.8",
       default_task: "server",
-      build_embedded: Mix.env == :prod,
-      start_permanent: Mix.env == :prod,
       description: description(),
       package: package(),
       deps: deps(),
@@ -19,15 +17,16 @@ defmodule App.Mixfile do
 
   def application do
     [
-      applications: [:logger, :nadia],
-      mod: {App, []}
+      mod: {Telegram, []},
+      applications: [:logger, :nadia]
     ]
   end
 
   defp deps do
     [
       {:nadia, "~> 0.4.1"},
-      {:ex_doc, "~> 0.14", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.14"},
+      {:poison, "~> 4.0"}
     ]
   end
 
@@ -45,7 +44,7 @@ defmodule App.Mixfile do
     [
       name: "tg_bot",
       licenses: ["Apache-2.0"],
-      links: %{"GitHub" => ""}
+      links: %{"GitHub" => "https://github.com/fly1ngDream/ex-tg-bot"}
     ]
   end
 end

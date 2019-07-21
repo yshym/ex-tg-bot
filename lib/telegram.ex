@@ -2,7 +2,7 @@ defmodule Telegram do
   use Application
 
   def start(_type, _args) do
-    bot_name = Application.get_env(:telegram, :bot_name)
+    bot_name = Application.get_env(:tg_bot, :bot_name)
 
     unless String.valid?(bot_name) do
       IO.warn """
