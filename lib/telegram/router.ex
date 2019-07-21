@@ -1,5 +1,5 @@
 defmodule Telegram.Router do
-  @bot_name Application.get_env(:tg_bot, :bot_name)
+  @bot_name Telegram.get_bot_username()
 
   # Code injectors
 
@@ -75,7 +75,6 @@ defmodule Telegram.Router do
       } = var!(update)) do
         handle_message(unquote(handler), [var!(update)])
       end
-
       def do_match_message(%{
         message: %{
           text: "/" <> unquote(command) <> " " <> _
@@ -83,7 +82,6 @@ defmodule Telegram.Router do
       } = var!(update)) do
         handle_message(unquote(handler), [var!(update)])
       end
-
       def do_match_message(%{
         message: %{
           text: "/" <> unquote(command) <> "@" <> unquote(@bot_name)
@@ -91,7 +89,6 @@ defmodule Telegram.Router do
       } = var!(update)) do
         handle_message(unquote(handler), [var!(update)])
       end
-
       def do_match_message(%{
         message: %{
           text: "/" <> unquote(command) <> "@" <> unquote(@bot_name) <> " " <> _
