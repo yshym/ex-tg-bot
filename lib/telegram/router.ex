@@ -10,13 +10,16 @@ defmodule Telegram.Router do
 
       def match_message(message) do
         try do
-          apply __MODULE__, :do_match_message, [message]
+          apply(__MODULE__, :do_match_message, [message])
         rescue
           err in FunctionClauseError ->
-            Logger.log :warn, """
+            Logger.log(
+              :warn,
+              """
               Errored when matching command. #{Poison.encode! err}
               Message was: #{Poison.encode! message}
               """
+            )
         end
       end
     end
@@ -29,38 +32,35 @@ defmodule Telegram.Router do
           text: unquote(message)
         }
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
-
       def do_match_message(%{
         message: %{
           text: unquote(message) <> " " <> _
         }
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
-
       def do_match_message(%{
         message: %{
           text: unquote(message) <> "@" <> unquote(@bot_name)
         }
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
-
       def do_match_message(%{
         message: %{
           text: unquote(message) <> "@" <> unquote(@bot_name) <> " " <> _
         }
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
     end
   end
   def generate_message(handler) do
     quote do
       def do_match_message(var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
     end
   end
@@ -73,7 +73,7 @@ defmodule Telegram.Router do
           text: "/" <> unquote(command)
         }
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
 
       def do_match_message(%{
@@ -81,7 +81,7 @@ defmodule Telegram.Router do
           text: "/" <> unquote(command) <> " " <> _
         }
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
 
       def do_match_message(%{
@@ -89,7 +89,7 @@ defmodule Telegram.Router do
           text: "/" <> unquote(command) <> "@" <> unquote(@bot_name)
         }
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
 
       def do_match_message(%{
@@ -97,7 +97,7 @@ defmodule Telegram.Router do
           text: "/" <> unquote(command) <> "@" <> unquote(@bot_name) <> " " <> _
         }
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
     end
   end
@@ -105,8 +105,8 @@ defmodule Telegram.Router do
   def generate_inline_query_matcher(handler) do
     quote do
       def do_match_message(%{inline_query: inline_query} = var!(update))
-      when not is_nil(inline_query) do
-        handle_message unquote(handler), [var!(update)]
+        when not is_nil(inline_query) do
+        handle_message(unquote(handler), [var!(update)])
       end
     end
   end
@@ -116,13 +116,13 @@ defmodule Telegram.Router do
       def do_match_message(%{
         inline_query: %{query: "/" <> unquote(command)}
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
 
       def do_match_message(%{
         inline_query: %{query: "/" <> unquote(command) <> " " <> _}
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
     end
   end
@@ -130,8 +130,8 @@ defmodule Telegram.Router do
   def generate_callback_query_matcher(handler) do
     quote do
       def do_match_message(%{callback_query: callback_query} = var!(update))
-      when not is_nil(callback_query) do
-        handle_message unquote(handler), [var!(update)]
+        when not is_nil(callback_query) do
+        handle_message(unquote(handler), [var!(update)])
       end
     end
   end
@@ -141,13 +141,13 @@ defmodule Telegram.Router do
       def do_match_message(%{
         callback_query: %{data: "/" <> unquote(command)}
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
 
       def do_match_message(%{
         callback_query: %{data: "/" <> unquote(command) <> " " <> _}
       } = var!(update)) do
-        handle_message unquote(handler), [var!(update)]
+        handle_message(unquote(handler), [var!(update)])
       end
     end
   end
@@ -214,7 +214,6 @@ defmodule Telegram.Router do
   defmacro inline_query_command(command, do: function) do
     generate_inline_query_command(command, function)
   end
-
   defmacro inline_query_command(commands, module, function)
     when is_list(commands) do
     Enum.map(
@@ -245,7 +244,6 @@ defmodule Telegram.Router do
   defmacro callback_query_command(command, do: function) do
     generate_callback_query_command(command, function)
   end
-
   defmacro callback_query_command(commands, module, function)
     when is_list(commands) do
     Enum.map(

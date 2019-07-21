@@ -4,7 +4,7 @@ defmodule Telegram.Matcher do
   # Server
 
   def start_link do
-    GenServer.start_link __MODULE__, :ok, name: __MODULE__
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
   def init(:ok) do
@@ -23,6 +23,6 @@ defmodule Telegram.Matcher do
   # Client
 
   def match(message) do
-    GenServer.cast __MODULE__, message
+    GenServer.cast(__MODULE__, message)
   end
 end

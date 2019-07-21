@@ -39,8 +39,11 @@ defmodule Telegram.Commander do
   end
 
   defmacro send_contact(phone_number, first_name, options \\ []) do
-    quote bind_quoted: [phone_number: phone_number, first_name: first_name,
-                        options: options] do
+    quote bind_quoted: [
+      phone_number: phone_number,
+      first_name: first_name,
+      options: options
+    ] do
       Nadia.send_contact(get_chat_id(), phone_number, first_name, options)
     end
   end
@@ -52,8 +55,11 @@ defmodule Telegram.Commander do
   end
 
   defmacro send_location(latitude, longitude, options \\ []) do
-    quote bind_quoted: [latitude: latitude, longitude: longitude,
-                        options: options] do
+    quote bind_quoted: [
+      latitude: latitude,
+      longitude: longitude,
+      options: options
+    ] do
       Nadia.send_location(get_chat_id(), latitude, longitude, options)
     end
   end
@@ -77,8 +83,13 @@ defmodule Telegram.Commander do
   end
 
   defmacro send_venue(latitude, longitude, title, address, options \\ []) do
-    quote bind_quoted: [latitude: latitude, longitude: longitude,
-                        title: title, address: address, options: options] do
+    quote bind_quoted: [
+      latitude: latitude,
+      longitude: longitude,
+      title: title,
+      address: address,
+      options: options
+    ] do
       Nadia.send_venue(get_chat_id(), latitude, longitude, title, address, options)
     end
   end
@@ -150,16 +161,17 @@ defmodule Telegram.Commander do
   defmacro get_chat_id do
     quote do
       case var!(update) do
-        %{inline_query: inline_query} when not is_nil(inline_query) ->
-          inline_query.from.id
+        %{inline_query: inline_query} when not is_nil(inline_query) -> inline_query.from.id
+
         %{callback_query: callback_query} when not is_nil(callback_query) ->
           callback_query.message.chat.id
-        %{message: %{chat: %{id: id}}} when not is_nil(id) ->
-          id
-        %{edited_message: %{chat: %{id: id}}} when not is_nil(id) ->
-          id
-        %{channel_post: %{chat: %{id: id}}} when not is_nil(id) ->
-          id
+
+        %{message: %{chat: %{id: id}}} when not is_nil(id) -> id
+
+        %{edited_message: %{chat: %{id: id}}} when not is_nil(id) -> id
+
+        %{channel_post: %{chat: %{id: id}}} when not is_nil(id) -> id
+
         _ -> raise "No chat id found!"
       end
     end
