@@ -87,10 +87,13 @@ defmodule NiceBot.Commands do
     case update.callback_query.data do
       "/choose rust" ->
         answer_callback_query(text: "Nope :3")
+
       "/choose elixir" ->
         answer_callback_query(text: "You are absolutely right")
+
       "/choose erlang" ->
         answer_callback_query(text: "¯\\_(ツ)_/¯")
+
       "/choose haskell" ->
         answer_callback_query(text: "Nope B)")
     end
