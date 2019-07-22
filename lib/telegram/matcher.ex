@@ -1,6 +1,9 @@
 defmodule Telegram.Matcher do
   use GenServer
 
+  require Protocol
+  Protocol.derive(Jason.Encoder, Nadia.Model.InlineKeyboardMarkup)
+
   # Server
 
   def start_link do
