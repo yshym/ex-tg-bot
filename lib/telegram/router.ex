@@ -25,7 +25,7 @@ defmodule Telegram.Router do
     end
   end
 
-  def generate_message(message, handler) do
+  def generate_message_matcher(message, handler) do
     quote do
       def do_match_message(%{
         message: %{
@@ -57,7 +57,7 @@ defmodule Telegram.Router do
       end
     end
   end
-  def generate_message(handler) do
+  def generate_message_matcher(handler) do
     quote do
       def do_match_message(var!(update)) do
         handle_message(unquote(handler), [var!(update)])
@@ -66,7 +66,7 @@ defmodule Telegram.Router do
   end
 
 
-  defp generate_command(command, handler) do
+  defp generate_command_matcher(command, handler) do
     quote do
       def do_match_message(%{
         message: %{
@@ -108,7 +108,7 @@ defmodule Telegram.Router do
     end
   end
 
-  def generate_inline_query_command(command, handler) do
+  def generate_inline_query_command_matcher(command, handler) do
     quote do
       def do_match_message(%{
         inline_query: %{query: "/" <> unquote(command)}
@@ -133,7 +133,7 @@ defmodule Telegram.Router do
     end
   end
 
-  def generate_callback_query_command(command, handler) do
+  def generate_callback_query_command_matcher(command, handler) do
     quote do
       def do_match_message(%{
         callback_query: %{data: "/" <> unquote(command)}
@@ -154,17 +154,17 @@ defmodule Telegram.Router do
   ## Message
 
   defmacro message(do: function) do
-    generate_message(function)
+    generate_message_matcher(function)
   end
   defmacro message(message, do: function)
     when is_bitstring(message) do
-    generate_message(message, function)
+    generate_message_matcher(message, function)
   end
   defmacro message(module, function) do
-    generate_message({module, function})
+    generate_message_matcher({module, function})
   end
   defmacro message(message, module, function) do
-    generate_message(message, {module, function})
+    generate_message_matcher(message, {module, function})
   end
 
   ## Command
@@ -173,22 +173,22 @@ defmodule Telegram.Router do
     when is_list(commands) do
     Enum.map(
       commands,
-      &generate_command(&1, function)
+      &generate_command_matcher(&1, function)
     )
   end
   defmacro command(command, do: function) do
-    generate_command(command, function)
+    generate_command_matcher(command, function)
   end
 
   defmacro command(commands, module, function)
     when is_list(commands) do
     Enum.map(
       commands,
-      &generate_command(&1, {module, function})
+      &generate_command_matcher(&1, {module, function})
     )
   end
   defmacro command(command, module, function) do
-    generate_command(command, {module, function})
+    generate_command_matcher(command, {module, function})
   end
 
   ## Inline query
@@ -205,21 +205,21 @@ defmodule Telegram.Router do
     when is_list(commands) do
     Enum.map(
       commands,
-      &generate_inline_query_command(&1, function)
+      &generate_inline_query_command_matcher(&1, function)
     )
   end
   defmacro inline_query_command(command, do: function) do
-    generate_inline_query_command(command, function)
+    generate_inline_query_command_matcher(command, function)
   end
   defmacro inline_query_command(commands, module, function)
     when is_list(commands) do
     Enum.map(
       commands,
-      &generate_inline_query_command(&1, {module, function})
+      &generate_inline_query_command_matcher(&1, {module, function})
     )
   end
   defmacro inline_query_command(command, module, function) do
-    generate_inline_query_command(command, {module, function})
+    generate_inline_query_command_matcher(command, {module, function})
   end
 
   ## Callback query
@@ -235,21 +235,21 @@ defmodule Telegram.Router do
     when is_list(commands) do
     Enum.map(
       commands,
-      &generate_callback_query_command(&1, function)
+      &generate_callback_query_command_matcher(&1, function)
     )
   end
   defmacro callback_query_command(command, do: function) do
-    generate_callback_query_command(command, function)
+    generate_callback_query_command_matcher(command, function)
   end
   defmacro callback_query_command(commands, module, function)
     when is_list(commands) do
     Enum.map(
       commands,
-      &generate_callback_query_command(&1, {module, function})
+      &generate_callback_query_command_matcher(&1, {module, function})
     )
   end
   defmacro callback_query_command(command, module, function) do
-    generate_callback_query_command(command, {module, function})
+    generate_callback_query_command_matcher(command, {module, function})
   end
 
   # Helpers

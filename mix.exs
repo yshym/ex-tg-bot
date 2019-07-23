@@ -44,7 +44,7 @@ defmodule App.Mixfile do
   defp package() do
     [
       name: "tg_bot",
-      licenses: ["Apache-2.0"],
+      licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/fly1ngDream/ex-tg-bot"}
     ]
   end
