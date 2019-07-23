@@ -10,7 +10,7 @@ First, add tg_bot to your `mix.exs` dependencies.
 
 ``` elixir
 def deps do
-  [{:tg_bot, "~> 0.1.1"}]
+  [{:tg_bot, "~> 0.1.2"}]
 end
 ```
 
